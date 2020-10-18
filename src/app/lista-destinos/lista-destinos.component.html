@@ -1,1 +1,19 @@
+<div class="form-container">
+    <caption class="form__title">Wishlist</caption>
+    <form action="#" class="form">
+
+        <div class="form-grupo">
+            <label class="form__label" for="nombre">Nombre</label>
+            <input class="form__input" id="nombre" type="text"placeholder="Nombre...">
+        </div>
+        <div class="form-grupo">
+            <label class="form__label" for="imagen">Imagen URL</label>
+            <input class="form__input" id="imagen" type="text"placeholder="Imagen URL...">
+        </div>
+
+        <button class="form__button" type="submit">Guardar!</button>
+
+    </form>
+</div>
+
 <app-destino-viaje *ngFor="let x of destinos" [nombre]="x"></app-destino-viaje>
