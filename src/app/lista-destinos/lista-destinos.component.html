@@ -4,17 +4,17 @@
 
         <div class="form-grupo">
             <label class="form__label" for="nombre">Nombre</label>
-            <input class="form__input" id="nombre" type="text"placeholder="Nombre...">
+            <input class="form__input" id="nombre" type="text"placeholder="Nombre..." #nombre>
         </div>
         <div class="form-grupo">
             <label class="form__label" for="imagen">Imagen URL</label>
-            <input class="form__input" id="imagen" type="text"placeholder="Imagen URL...">
+            <input class="form__input" id="imagen" type="text"placeholder="Imagen URL..." #url>
         </div>
 
-        <button class="form__button" type="submit">Guardar!</button>
+        <button class="form__button" type="submit" (click)="guardar(nombre.value, url.value)">Guardar!</button>
 
     </form>
 </div>
 <div class="card-container">
-    <app-destino-viaje *ngFor="let x of destinos" [nombre]="x"></app-destino-viaje>
+    <app-destino-viaje *ngFor="let x of destinos" [destino]="x"></app-destino-viaje>
 </div>
