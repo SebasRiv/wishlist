@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { DestinoViaje } from '../models/destino-viaje.model';
 
 @Component({
@@ -9,11 +9,17 @@ import { DestinoViaje } from '../models/destino-viaje.model';
 export class DestinoViajeComponent implements OnInit {
 
   @Input() destino:DestinoViaje;
+  @Output() clicked: EventEmitter<DestinoViaje>;
 
-  constructor() { 
+  constructor() {
+    this.clicked = new EventEmitter(); 
   }
 
   ngOnInit(): void {
   }
 
+  ir() {
+    this.clicked.emit(this.destino);
+    return false;
+  }
 }

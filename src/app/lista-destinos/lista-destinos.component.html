@@ -16,5 +16,5 @@
     </form>
 </div>
 <div class="card-container">
-    <app-destino-viaje *ngFor="let x of destinos" [destino]="x"></app-destino-viaje>
+    <app-destino-viaje *ngFor="let x of destinos" [destino]="x" (clicked)="elegido($event)"></app-destino-viaje>
 </div>
