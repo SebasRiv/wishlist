@@ -1,0 +1,19 @@
+<div class="form-container">
+    <caption class="form__title">Wishlist</caption>
+    <form action="#" class="form" [formGroup]="fg" (ngSubmit)="guardar(fg.controls['nombre'].value, fg.controls['url'].value)">
+
+        <div class="form-grupo">
+            <label class="form__label" for="nombre">Nombre</label>
+            <input class="form__input" id="nombre" type="text" placeholder="Nombre..." [formControl]="fg.controls['nombre']">
+            <div *ngIf="!fg.controls['nombre'].valid">nombre invalido!</div>
+            <div *ngIf="fg.controls['nombre'].hasError('required')">nombre requerido!</div>
+        </div>
+        <div class="form-grupo">
+            <label class="form__label" for="imagen">Imagen URL</label>
+            <input class="form__input" id="imagen" type="text" placeholder="Imagen URL..." [formControl]="fg.controls['url']">
+        </div>
+
+        <button class="form__button" type="submit" *ngIf="fg.valid">Guardar!</button>
+
+    </form>
+</div>
