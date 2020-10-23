@@ -1,7 +1,18 @@
 <div class="card">
+    <span class="card__span">{{ position }}</span>
     <img class="card__img" src="https://cdn.pixabay.com/photo/2020/09/12/09/26/gorilla-5565295_1280.jpg" alt="mico">
     <h4 class="card__title">{{ destino.nombre }}</h4>
-    <p class="card__text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, mollitia! Accusantium.</p>
+    <p class="card__text">Servicios</p>
+    <ul>
+        <li *ngFor="let s of destino.servicios">
+            <span [ngSwitch]="s">
+                <i *ngSwitchCase="'desayuno'" style="color: red">{{ s }}</i>
+                <i *ngSwitchDefault>{{ s }}</i>
+            </span>
+        </li>
+    </ul>
     <a class="card__link" href="#" (click)="ir()" >Ir!</a>
-    <span [style.display]="destino.isSelected() ? '' : 'none'">- PREFERIDO -</span>
+    <span *ngIf="destino.isSelected()">
+        <span ngNonBindable>- PREFERIDO -</span>
+    </span>
 </div>
