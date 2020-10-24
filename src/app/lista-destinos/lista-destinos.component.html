@@ -6,3 +6,12 @@
     (clicked)="elegido($event)"
     ></app-destino-viaje>
 </div>
+
+<hr>
+
+<div class="card-container">
+    <h5>Actividad</h5>
+    <ul>
+        <li *ngFor="let u of updates">{{u}}</li>
+    </ul>
+</div>
