@@ -23,7 +23,9 @@ export const intializeDestinoViajeState = function () {
 // ACCIONES
 export enum DestinosViajesActionTypes {
     NUEVO_DESTINO = '[Destinos Viajes] Nuevo',
-    ELEGIDO_FAVORITO = '[Destinos Viajes] Favorito'
+    ELEGIDO_FAVORITO = '[Destinos Viajes] Favorito',
+    VOTE_UP = '[Destinos Viajes] Vote Up',
+    VOTE_DOWN = '[Destinos Viajes] Vote Down'
 }
 
 export class NuevoDestinoAction implements Action {
@@ -35,8 +37,16 @@ export class ElegidoFavoritoAction implements Action {
     type = DestinosViajesActionTypes.ELEGIDO_FAVORITO;
     constructor(public destino: DestinoViaje) { }
 }
+export class VoteUpAction implements Action {
+    type = DestinosViajesActionTypes.VOTE_UP;
+    constructor(public destino: DestinoViaje) { }
+}
+export class VoteDownAction implements Action {
+    type = DestinosViajesActionTypes.VOTE_DOWN;
+    constructor(public destino: DestinoViaje) { }
+}
 
-export type DestinoViajeActions = NuevoDestinoAction | ElegidoFavoritoAction;
+export type DestinoViajeActions = NuevoDestinoAction | ElegidoFavoritoAction | VoteUpAction | VoteDownAction;
 
 // REDUCERS
 export function reducerDestinosViajes(
@@ -52,12 +62,23 @@ export function reducerDestinosViajes(
         }
         case DestinosViajesActionTypes.ELEGIDO_FAVORITO: {
             state.items.forEach(x => x.setSelected(false));
-            let fav: DestinoViaje = (action as ElegidoFavoritoAction).destino;
+            const fav: DestinoViaje = (action as ElegidoFavoritoAction).destino;
             fav.setSelected(true);
             return {
                 ...state,
                 favorito: fav
             };
+        }
+        case DestinosViajesActionTypes.VOTE_UP: {
+            const d: DestinoViaje = (action as VoteUpAction).destino;
+            d.voteUp();
+            return { ...state };
+        }
+
+        case DestinosViajesActionTypes.VOTE_DOWN: {
+            const d: DestinoViaje = (action as VoteDownAction).destino;
+            d.voteDown();
+            return { ...state };
         }
     }
     return state;

@@ -11,6 +11,7 @@ import { FormDestinoViajeComponent } from './form-destino-viaje/form-destino-via
 import { DestinosViajesState, reducerDestinosViajes, intializeDestinoViajeState, DestinosViajesActionTypes, DestinoViajesEffects } from './models/destinos-viajes-state.model';
 import { ActionReducerMap, StoreModule as NgRxStoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -46,7 +47,8 @@ let reducerInitialState = {
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     NgRxStoreModule.forRoot(reducers, { initialState: reducerInitialState }),
-    EffectsModule.forRoot([DestinoViajesEffects])
+    EffectsModule.forRoot([DestinoViajesEffects]),
+    StoreDevtoolsModule.instrument()
 
   ],
   providers: [],

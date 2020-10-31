@@ -1,15 +1,21 @@
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { AppState } from '../app.module';
 import { DestinoViaje } from './destino-viaje.model';
+import { NuevoDestinoAction } from './destinos-viajes-state.model';
 
+@Injectable()
 export class DestinosApiClient {
     destinos: DestinoViaje[];
     current: Subject<DestinoViaje> = new BehaviorSubject<DestinoViaje>(null);
 
-    constructor() {
+    constructor(private store: Store<AppState>) {
         this.destinos = [];
     }
 
     add(d: DestinoViaje) {
+        this.store.dispatch(new NuevoDestinoAction(d));
         this.destinos.push(d);
     }
 
