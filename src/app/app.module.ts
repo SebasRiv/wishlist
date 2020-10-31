@@ -8,6 +8,9 @@ import { ListaDestinosComponent } from './lista-destinos/lista-destinos.componen
 import { DestinoDetalleComponent } from './destino-detalle/destino-detalle.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormDestinoViajeComponent } from './form-destino-viaje/form-destino-viaje.component';
+import { DestinosViajesState, reducerDestinosViajes, intializeDestinoViajeState, DestinosViajesActionTypes, DestinoViajesEffects } from './models/destinos-viajes-state.model';
+import { ActionReducerMap, StoreModule as NgRxStoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -15,19 +18,36 @@ const routes: Routes = [
   { path: 'destino', component: DestinoDetalleComponent},
 ];
 
+// redux init
+export interface AppState {
+  destinos: DestinosViajesState;
+}
+
+const reducers: ActionReducerMap<AppState> = {
+  destinos: reducerDestinosViajes
+};
+
+let reducerInitialState = {
+  destinos: intializeDestinoViajeState()
+}
+// redux fin init
+
 @NgModule({
   declarations: [
     AppComponent,
     DestinoViajeComponent,
     ListaDestinosComponent,
     DestinoDetalleComponent,
-    FormDestinoViajeComponent
+    FormDestinoViajeComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    NgRxStoreModule.forRoot(reducers, { initialState: reducerInitialState }),
+    EffectsModule.forRoot([DestinoViajesEffects])
+
   ],
   providers: [],
   bootstrap: [AppComponent]
