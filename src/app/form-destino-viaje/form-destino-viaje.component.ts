@@ -1,5 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validator, ValidatorFn, Validators } from '@angular/forms';
+import { fromEvent } from 'rxjs';
+import { map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { ajax } from 'rxjs/ajax';
 import { DestinoViaje } from '../models/destino-viaje.model';
 
 @Component({
@@ -11,6 +14,7 @@ export class FormDestinoViajeComponent implements OnInit {
   @Output() onItemAdded: EventEmitter<DestinoViaje>;
   fg: FormGroup;
   minLongitud = 3;
+  searchResults: string[];
 
   constructor(fb: FormBuilder) {
     this.onItemAdded = new EventEmitter();
@@ -30,6 +34,17 @@ export class FormDestinoViajeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const elemNombre = <HTMLInputElement>document.getElementById('nombre');
+    fromEvent(elemNombre, 'input')
+      .pipe(
+        map((e: KeyboardEvent) => (e.target as HTMLInputElement).value),
+        filter(text => text.length > 2),
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap(() => ajax('/assets/datos.json'))
+      ).subscribe(ajaxResponse => {
+        this.searchResults = ajaxResponse.response;
+      });
   }
 
   guardar(nombre: string, url: string): boolean {
