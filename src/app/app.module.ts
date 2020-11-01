@@ -12,11 +12,20 @@ import { DestinosViajesState, reducerDestinosViajes, intializeDestinoViajeState,
 import { ActionReducerMap, StoreModule as NgRxStoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { LoginComponent } from './login/login.component';
+import { ProtectedComponent } from './protected/protected.component';
+import { UsuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full'},
-  { path: 'home', component: ListaDestinosComponent},
-  { path: 'destino', component: DestinoDetalleComponent},
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: ListaDestinosComponent },
+  { path: 'destino', component: DestinoDetalleComponent },
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'protected',
+    component: ProtectedComponent,
+    canActivate: [UsuarioLogueadoGuard]
+  }
 ];
 
 // redux init
@@ -40,6 +49,8 @@ let reducerInitialState = {
     ListaDestinosComponent,
     DestinoDetalleComponent,
     FormDestinoViajeComponent,
+    LoginComponent,
+    ProtectedComponent,
   ],
   imports: [
     BrowserModule,
