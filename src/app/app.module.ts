@@ -15,6 +15,17 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LoginComponent } from './login/login.component';
 import { ProtectedComponent } from './protected/protected.component';
 import { UsuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado.guard';
+import { VuelosComponentComponent } from './vuelos-component/vuelos-component.component';
+import { VuelosMainComponentComponent } from './vuelos-main-component/vuelos-main-component.component';
+import { VuelosMasInfoComponentComponent } from './vuelos-mas-info-component/vuelos-mas-info-component.component';
+import { VuelosDetallesComponentComponent } from './vuelos-detalles-component/vuelos-detalles-component.component';
+
+export const childrenRoutesVuelos: Routes = [
+  { path: '', redirectTo: 'main', pathMatch: 'full' },
+  { path: 'main', component: VuelosMainComponentComponent },
+  { path: 'mas-info', component: VuelosMasInfoComponentComponent },
+  { path: ':id', component: VuelosDetallesComponentComponent },
+];
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -25,6 +36,12 @@ const routes: Routes = [
     path: 'protected',
     component: ProtectedComponent,
     canActivate: [UsuarioLogueadoGuard]
+  },
+  {
+    path: 'vuelos',
+    component: VuelosComponentComponent,
+    canActivate: [UsuarioLogueadoGuard],
+    children: childrenRoutesVuelos
   }
 ];
 
@@ -51,6 +68,8 @@ let reducerInitialState = {
     FormDestinoViajeComponent,
     LoginComponent,
     ProtectedComponent,
+    VuelosComponentComponent,
+    VuelosMainComponentComponent,
   ],
   imports: [
     BrowserModule,
