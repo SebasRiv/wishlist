@@ -1,22 +1,31 @@
-<div class="container">
-
-  <div class="nav">
-    <div class="nav-container">
-      <h1>Ruteo Simple</h1>
-      <div class="nav-list">
-        <a [routerLink]="['/home']">Home</a>
-        <a [routerLink]="['/destino']">Destino</a>
-      </div>
-    </div>
+<div class="page-header">
+  <div style="float: right;">
+    <select (change)="translate.use($event.target.value)">
+      <option value="es">Español</option>
+      <option value="fr">France</option>
+      <option value="en">English</option>
+    </select>
   </div>
 
-  <h1>
-    {{ title }}
-  </h1>
-
-  <router-outlet></router-outlet>
+  <div class="container">
+  
+    <div class="nav">
+      <div class="nav-container">
+        <h1>Ruteo Simple</h1>
+        <div class="nav-list">
+          <a [routerLink]="['/home']">Home</a>
+          <a [routerLink]="['/destino']">Destino</a>
+        </div>
+      </div>
+    </div>
+  
+    <h1>
+      {{ title }} <b [innerHTML]="'HOLA' | translate"></b>
+    </h1>
+  
+    <router-outlet></router-outlet>
+  </div>
 </div>
-
 <hr>
 
 Fecha {{ time | async }}
