@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { InjectionToken, NgModule } from '@angular/core';
+import { APP_INITIALIZER, Injectable, InjectionToken, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router'
 
 import { AppComponent } from './app.component';
@@ -8,10 +8,13 @@ import { ListaDestinosComponent } from './lista-destinos/lista-destinos.componen
 import { DestinoDetalleComponent } from './destino-detalle/destino-detalle.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormDestinoViajeComponent } from './form-destino-viaje/form-destino-viaje.component';
-import { DestinosViajesState, reducerDestinosViajes, intializeDestinoViajeState, DestinosViajesActionTypes, DestinoViajesEffects } from './models/destinos-viajes-state.model';
-import { ActionReducerMap, StoreModule as NgRxStoreModule } from '@ngrx/store';
+import { DestinosViajesState, reducerDestinosViajes, intializeDestinoViajeState, DestinosViajesActionTypes, DestinoViajesEffects, InitMyDataAction } from './models/destinos-viajes-state.model';
+import { ActionReducerMap, Store, StoreModule as NgRxStoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { HttpClient, HttpClientModule, HttpHeaders, HttpRequest } from '@angular/common/http';
+import Dexie from 'dexie';
+
 import { LoginComponent } from './login/login.component';
 import { ProtectedComponent } from './protected/protected.component';
 import { UsuarioLogueadoGuard } from './guards/usuario-logueado/usuario-logueado.guard';
@@ -21,6 +24,7 @@ import { VuelosMasInfoComponentComponent } from './vuelos-mas-info-component/vue
 import { VuelosDetallesComponentComponent } from './vuelos-detalles-component/vuelos-detalles-component.component';
 import { ReservasModule } from './reservas/reservas.module';
 import { AuthService } from './services/auth.service';
+import { DestinoViaje } from './models/destino-viaje.model';
 
 // app config
 export interface AppConfig {
@@ -34,6 +38,7 @@ const APP_CONFIG_VALUE: AppConfig = {
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 // fin app config
 
+// init routing
 export const childrenRoutesVuelos: Routes = [
   { path: '', redirectTo: 'main', pathMatch: 'full' },
   { path: 'main', component: VuelosMainComponentComponent },
@@ -58,6 +63,24 @@ const routes: Routes = [
     children: childrenRoutesVuelos
   }
 ];
+// fin rounting
+
+// app init
+export function init_app(appLoadService: AppLoadService): () => Promise<any> {
+  return () => appLoadService.initializeDestinosViajesState();
+}
+
+@Injectable()
+class AppLoadService {
+  constructor(private store: Store<AppState>, private http: HttpClient) {}
+  async initializeDestinosViajesState(): Promise<any> {
+    const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+    const req = new HttpRequest('GET', APP_CONFIG_VALUE.apiEndPoint + '/my', { headers: headers });
+    const response: any = await this.http.request(req).toPromise();
+    this.store.dispatch(new InitMyDataAction(response.body));
+  }
+}
+// fin app init
 
 // redux init
 export interface AppState {
@@ -72,6 +95,25 @@ let reducerInitialState = {
   destinos: intializeDestinoViajeState()
 }
 // redux fin init
+
+
+// dixie db
+@Injectable({
+  providedIn: 'root'
+})
+export class MyDataBase extends Dexie {
+  destinos: Dexie.Table<DestinoViaje, number>;
+  constructor() {
+    super('MyDatabase');
+    this.version(1).stores({
+      destinos: '++id, nombre, imagenUrl',
+    });
+  } 
+}
+
+export const db = new MyDataBase();
+// fin dexie db
+
 
 @NgModule({
   declarations: [
@@ -89,6 +131,7 @@ let reducerInitialState = {
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     RouterModule.forRoot(routes),
     NgRxStoreModule.forRoot(reducers, { initialState: reducerInitialState }),
     EffectsModule.forRoot([DestinoViajesEffects]),
@@ -98,7 +141,10 @@ let reducerInitialState = {
   ],
   providers: [
     AuthService, UsuarioLogueadoGuard,
-    { provide: APP_CONFIG, useValue: APP_CONFIG_VALUE}
+    { provide: APP_CONFIG, useValue: APP_CONFIG_VALUE},
+    AppLoadService,
+    { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true },
+    MyDataBase
   ],
   bootstrap: [AppComponent]
 })

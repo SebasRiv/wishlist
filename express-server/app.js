@@ -14,7 +14,7 @@ app.get('/url', (req, res, next) => {
 });
 
 const ciudades = ['Paris', "Barcelona", "Barranquilla", "Montevideo", "Santiago de chile", "Mexico DF", "New York"]
-app.get('/ciudades', (req, res, next) => res.json(ciudades.filter(c => c.toLowerCase().indexOf(req.query.q.toString().toLowerCase()) > -1 )));
+app.get('/ciudades', (req, res, next) => res.json(ciudades.filter(c => c.toLowerCase().indexOf(req.query.q.toString().toLowerCase()) > -1)));
 
 let misDestinos = [];
 
@@ -24,6 +24,10 @@ app.get('/my', (req, res, next) => {
 
 app.post('/my', (req, res, next) => {
     console.log(req.body);
-    misDestinos = [req.body];
+    misDestinos.push(req.body.nuevo);
     res.json(misDestinos);
 });
+
+app.get('/api/translation', (req, res) => res.json([
+    { lang: req.query.lang, key: 'HOLA', value: 'HOLA ' + req.query.lang }
+]));
