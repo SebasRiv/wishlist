@@ -30,6 +30,7 @@ import { from, Observable } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+import { EspiameDirective } from './espiame.directive';
 
 // app config
 export interface AppConfig {
@@ -175,6 +176,7 @@ function HttpLoaderFactory(http: HttpClient) {
     ProtectedComponent,
     VuelosComponentComponent,
     VuelosMainComponentComponent,
+    EspiameDirective,
   ],
   imports: [
     BrowserModule,
