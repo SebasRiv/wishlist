@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" [@esFavorito]="destino.isSelected() ? 'estadoFavorito' : 'estadoNoFavorito'">
     <span class="card__span">{{ position }}</span>
     <img class="card__img" src="https://cdn.pixabay.com/photo/2020/09/12/09/26/gorilla-5565295_1280.jpg" alt="mico">
     <h4 class="card__title">{{ destino.nombre }}</h4>
