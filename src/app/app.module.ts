@@ -31,6 +31,7 @@ import { flatMap } from 'rxjs/operators';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { EspiameDirective } from './espiame.directive';
+import { TrackearClickDirective } from './trackear-click.directive';
 
 // app config
 export interface AppConfig {
@@ -177,6 +178,7 @@ function HttpLoaderFactory(http: HttpClient) {
     VuelosComponentComponent,
     VuelosMainComponentComponent,
     EspiameDirective,
+    TrackearClickDirective,
   ],
   imports: [
     BrowserModule,
