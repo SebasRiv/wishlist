@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/myapp
     docker:
-      - image: circle/node:8-browsers
+      - image: circle/node:12-browsers
     steps:
       - checkout:
       path: ~/myapp
